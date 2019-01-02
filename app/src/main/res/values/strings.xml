@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Material Stopwatch</string>
+    <string name="reset">Reset</string>
+    <string name="default_time">00.00</string>
+</resources>
