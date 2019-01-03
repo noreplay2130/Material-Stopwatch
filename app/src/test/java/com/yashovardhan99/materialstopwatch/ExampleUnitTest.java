@@ -1,4 +1,4 @@
-package com.yashovardhan99.stopwatch;
+package com.yashovardhan99.materialstopwatch;
 
 import org.junit.Test;
 
