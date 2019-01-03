@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
  */
 public class StopwatchFragment extends Fragment {
 
-    public Stopwatch stopwatch;
+    Stopwatch stopwatch;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
