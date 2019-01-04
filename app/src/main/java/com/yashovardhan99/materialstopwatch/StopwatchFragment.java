@@ -29,6 +29,7 @@ public class StopwatchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: ");
         stopwatch.setTextView(Objects.requireNonNull(getActivity()).findViewById(R.id.elapsed));
     }
 }
