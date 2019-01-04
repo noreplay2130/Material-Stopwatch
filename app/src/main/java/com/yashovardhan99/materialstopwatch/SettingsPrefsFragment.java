@@ -10,6 +10,6 @@ import androidx.preference.PreferenceFragmentCompat;
 public class SettingsPrefsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.settings, rootKey);
+        setPreferencesFromResource(R.xml.setting_prefs, rootKey);
     }
 }

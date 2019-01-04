@@ -15,10 +15,10 @@ import android.widget.TextView;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+
+import static com.yashovardhan99.materialstopwatch.MainActivity.stopwatchFragment;
 
 
 /**
@@ -26,51 +26,41 @@ import androidx.fragment.app.FragmentManager;
  */
 public class MainFragment extends Fragment {
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final String FRAG_KEY = "STOPWATCH_FRAG";
     private final String TAG = "MainFragment";
     private final String TIME_TEXT_KEY = "STOPWATCH_TIME";
-    private StopwatchFragment stopwatchFragment;
     private TextView elapsedTime;
     private ImageButton resetButton;
+    private View rootView;
 
     public MainFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
-
-        stopwatchFragment = (StopwatchFragment) fragmentManager.findFragmentByTag(FRAG_KEY);
-        if (stopwatchFragment == null) {
-            stopwatchFragment = new StopwatchFragment();
-            fragmentManager.beginTransaction().add(stopwatchFragment, FRAG_KEY).commit();
-            Log.d(TAG, "onCreate: Created new StopwatchFragment");
-        }
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (rootView != null)
+            return rootView;
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
         elapsedTime = rootView.findViewById(R.id.elapsed);
         resetButton = rootView.findViewById(R.id.reset);
         elapsedTime.setOnClickListener(this::onClick);
         resetButton.setOnClickListener(this::onClick);
-
         Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+
         ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         setHasOptionsMenu(true);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(TIME_TEXT_KEY) && stopwatchFragment.stopwatch.isPaused()) {
             elapsedTime.setText(savedInstanceState.getString(TIME_TEXT_KEY));
             resetButton.setVisibility(View.VISIBLE);
-            Log.d(TAG, "onCreate: Restored state");
+            Log.d(TAG, "onCreateView: Restored state");
         } else
             resetButton.setVisibility(View.GONE);
+
+        if (stopwatchFragment.stopwatch != null)
+            stopwatchFragment.stopwatch.setTextView(elapsedTime);
 
         return rootView;
     }
@@ -108,9 +98,7 @@ public class MainFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.settings:
                 Log.d(TAG, "onOptionsItemSelected: Settings");
-                SettingsPrefsFragment prefsFragment = new SettingsPrefsFragment();
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager()
-                        .beginTransaction().replace(R.id.main_layout, prefsFragment).commit();
+                ((MainActivity) Objects.requireNonNull(getActivity())).startSettings();
                 return true;
             case R.id.about:
                 Log.d(TAG, "onOptionsItemSelected: About");
