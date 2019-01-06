@@ -35,6 +35,7 @@ public class SettingsParentFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
+        Objects.requireNonNull(((MainActivity) getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         SettingsPrefsFragment settingsPrefsFragment = new SettingsPrefsFragment();
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.settings_holder, settingsPrefsFragment).commit();

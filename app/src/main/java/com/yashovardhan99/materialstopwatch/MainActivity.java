@@ -1,23 +1,26 @@
 package com.yashovardhan99.materialstopwatch;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String FRAG_KEY = "MAIN_FRAG_KEY";
+    static StopwatchFragment stopwatchFragment;
     @SuppressWarnings("FieldCanBeLocal")
     private final String TAG = "MainActivity";
     private final String FRAG_TAG = "MAIN_FRAG_TAG";
     @SuppressWarnings("FieldCanBeLocal")
     private final String STOPWATCH_FRAG_TAG = "STOPWATCH_FRAG_TAG";
     Fragment mainFragment;
-    static StopwatchFragment stopwatchFragment;
     FragmentManager fragmentManager;
 
     @Override
@@ -46,11 +49,23 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Transaction done");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateSpeed();
+    }
+
     void startSettings() {
         mainFragment = new SettingsParentFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_layout, mainFragment, FRAG_TAG)
                 .addToBackStack(null).commit();
+    }
+
+    void updateSpeed() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String speedString = sharedPreferences.getString(getString(R.string.speed_key), "100");
+        updateSpeed(speedString);
     }
 
     @Override
@@ -60,5 +75,37 @@ public class MainActivity extends AppCompatActivity {
         if (mainFragment != null && mainFragment.isAdded())
             fragmentManager.putFragment(outState, FRAG_KEY, mainFragment);
         super.onSaveInstanceState(outState);
+    }
+
+    public boolean updateSpeed(Object newSpeed) {
+        try {
+            assert newSpeed != null;
+            int speed = Integer.parseInt(newSpeed.toString());
+            stopwatchFragment.stopwatch.setClockDelay(speed);
+            return true;
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "updateSpeed: NumberFormatException", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: " + item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
+                return true;
+            case R.id.settings:
+                Log.d(TAG, "onOptionsItemSelected: Settings");
+                startSettings();
+                return true;
+            case R.id.about:
+                Log.d(TAG, "onOptionsItemSelected: About");
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -91,22 +90,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.options_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                Log.d(TAG, "onOptionsItemSelected: Settings");
-                ((MainActivity) Objects.requireNonNull(getActivity())).startSettings();
-                return true;
-            case R.id.about:
-                Log.d(TAG, "onOptionsItemSelected: About");
-                return true;
-            default:
-                Log.d(TAG, "onOptionsItemSelected: Defaut - " + item.getTitle().toString());
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 

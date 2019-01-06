@@ -4,4 +4,7 @@
     <string name="default_time">00.00</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+    <string name="stopwatch_speed">Stopwatch speed</string>
+    <string name="speed_key" translatable="false">speed</string>
+    <string name="settings_key" translatable="false">settings_key</string>
 </resources>
