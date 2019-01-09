@@ -7,4 +7,6 @@
     <string name="stopwatch_speed">Stopwatch speed</string>
     <string name="speed_key" translatable="false">speed</string>
     <string name="settings_key" translatable="false">settings_key</string>
+    <string name="font_key">font_key</string>
+    <string name="font_size">Stopwatch font size</string>
 </resources>

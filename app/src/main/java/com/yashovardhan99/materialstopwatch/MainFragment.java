@@ -1,8 +1,11 @@
 package com.yashovardhan99.materialstopwatch;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,7 +64,24 @@ public class MainFragment extends Fragment {
         if (stopwatchFragment.stopwatch != null)
             stopwatchFragment.stopwatch.setTextView(elapsedTime);
 
+//        elapsedTime.setTextSize(TypedValue.COMPLEX_UNIT_SP,48);
+
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (sharedPreferences.contains(getString(R.string.font_key))) {
+            try {
+                float size = Float.parseFloat(sharedPreferences.getString(getString(R.string.font_key), "48"));
+                Log.d(TAG, "onResume: Font size : " + size);
+                elapsedTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+            } catch (ArithmeticException e) {
+                Log.e(TAG, "onResume: ", e);
+            }
+        }
     }
 
     public void onClick(View view) {

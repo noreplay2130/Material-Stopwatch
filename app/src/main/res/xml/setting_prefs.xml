@@ -11,4 +11,12 @@
         android:entries="@array/freq_entries"
         android:defaultValue="100"
         app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:icon="@drawable/ic_format_size_white_24dp"
+        android:key="@string/font_key"
+        android:title="@string/font_size"
+        android:entryValues="@array/font_values"
+        android:entries="@array/font_entries"
+        android:defaultValue="48"
+        app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>
