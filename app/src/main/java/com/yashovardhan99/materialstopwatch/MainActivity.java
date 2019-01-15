@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,12 +23,14 @@ public class MainActivity extends AppCompatActivity {
     private final String STOPWATCH_FRAG_TAG = "STOPWATCH_FRAG_TAG";
     Fragment mainFragment;
     FragmentManager fragmentManager;
+    NavController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
 
         fragmentManager = getSupportFragmentManager();
         stopwatchFragment = (StopwatchFragment) fragmentManager.findFragmentByTag(STOPWATCH_FRAG_TAG);
@@ -37,16 +40,18 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: Created new StopwatchFragment");
         }
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(FRAG_KEY)) {
-            mainFragment = fragmentManager.getFragment(savedInstanceState, FRAG_KEY);
-            Log.d(TAG, "onCreate: Restoring MainFragment");
-        }
-        if (mainFragment == null) {
-            Log.d(TAG, "onCreate: new MainFragment");
-            mainFragment = new MainFragment();
-        }
-        fragmentManager.beginTransaction().replace(R.id.main_layout, mainFragment, FRAG_TAG).commit();
-        Log.d(TAG, "onCreate: Transaction done");
+        controller = Navigation.findNavController(this, R.id.main_layout);
+//
+//        if (savedInstanceState != null && savedInstanceState.containsKey(FRAG_KEY)) {
+//            mainFragment = fragmentManager.getFragment(savedInstanceState, FRAG_KEY);
+//            Log.d(TAG, "onCreate: Restoring MainFragment");
+//        }
+//        if (mainFragment == null) {
+//            Log.d(TAG, "onCreate: new MainFragment");
+//            mainFragment = new MainFragment();
+//        }
+//        fragmentManager.beginTransaction().replace(R.id.main_layout, mainFragment, FRAG_TAG).commit();
+//        Log.d(TAG, "onCreate: Transaction done");
     }
 
     @Override
@@ -68,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
         updateSpeed(speedString);
     }
 
-    @Override
+    /*@Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         mainFragment = fragmentManager.findFragmentById(R.id.main_layout);
         Log.d(TAG, "onSaveInstanceState: MainFragment : " + mainFragment);
         if (mainFragment != null && mainFragment.isAdded())
             fragmentManager.putFragment(outState, FRAG_KEY, mainFragment);
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     public boolean updateSpeed(Object newSpeed) {
         try {
@@ -94,11 +99,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onOptionsItemSelected: " + item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                getSupportFragmentManager().popBackStack();
-                return true;
+//                getSupportFragmentManager().popBackStack();
+                return controller.navigateUp();
             case R.id.settings:
                 Log.d(TAG, "onOptionsItemSelected: Settings");
-                startSettings();
+//                startSettings();
+                controller.navigate(R.id.action_mainFragment_to_settingsParentFragment);
                 return true;
             case R.id.about:
                 Log.d(TAG, "onOptionsItemSelected: About");
